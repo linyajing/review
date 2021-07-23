@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input type="text" id="ipt">
+    <script>
+        function debounce(fn, time) {
+            let timer = null;
+            return function () {
+                const arg = arguments;
+                if (timer) {
+                    clearTimeout(timer);
+                }
+                timer = setTimeout(function() {
+                    fn.apply(this, arg);
+                }, time);
+            }
+        }
+        let ipt = document.getElementById('ipt');
+        function onCompositionStart (e) {
+            e.target.composing = true;
+        }
+        function onCompositionEnd (e) {
+            const event = new CustomEvent("input");
+            e.target.composing = false;
+            e.target.dispatchEvent(event);
+        }
+
+        ipt.addEventListener('input', debounce(function (e) {
+            if (e.target.composing) {
+                return;
+            }
+            console.log(e.target.value);
+        }, 500));
+        ipt.addEventListener("compositionstart", onCompositionStart);
+        ipt.addEventListener("compositionend", onCompositionEnd);
+    </script>
+</body>
+</html>

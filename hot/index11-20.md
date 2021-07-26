@@ -48,11 +48,20 @@ Array.prototype.zonghe = function () {
 - then是异步执行，属于微任务队列
 
 # 第 14 题：情人节福利题，如何实现一个 new
-- 首先分析new 的定义
-- 没有返回值默认返回this
-- 
+1. 创建一个空的简单JavaScript对象（即{}）
+2. 链接该对象（设置该对象的constructor）到另一个对象 
+3. 将步骤1新创建的对象作为this的上下文
+4. 如果该函数没有返回对象，则返回this
 ```js
-
+    function _new (fn, ...arg) {
+        let obj = {};
+        obj.__proto__ = fn.prototype;
+        let ret = fn.call(obj, ...args);
+        if ((typeof ret === 'object' || typeof ret === 'function') && ret !== null) {
+            return ret 
+        }
+        return obj;
+    }
 ```
 
 # 第 15 题：简单讲解一下http2的多路复用

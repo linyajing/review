@@ -50,12 +50,70 @@
  - 组件是用来复用的，js中对象是引用关系，如果组件中 data 是一个对象，那么这样作用域没有隔离，子组件中的 data 属性值会相互影响
 13. v-model 的原理
  - 我们在 vue 项目中主要使用 v-model 指令在表单 input、textarea、select 等元素上创建双向数据绑定，我们知道 v-model 本质上不过是语法糖，v-model 在内部为不同的输入元素使用不同的属性并抛出不同的事件。如果在自定义组件中，v-model 默认会利用名为 value 的 prop 和名为 input 的事件
+
 14. Vue 是如何实现数据双向绑定的？
- - 1. 实现一个监听器 Observe
+ - 1. 实现一个监听器 Observer
+    - Vue中有个Observer类，来管理响应式化处理 Object.defineProperty的过程
+    - 简单来说就是将 data中的数据进行响应式的过程
+    ```js
+    class Observer {
+        constructor() {
+            // 响应式绑定数据通过方法
+    	    observe(this.data);
+        }
+    }
+
+    export function observe (data) {
+        const keys = Object.keys(data);
+        for (let i = 0; i < keys.length; i++) {
+            // 将data中我们定义的每个属性进行响应式绑定
+            defineReactive(obj, keys[i]);
+        }
+    }
+    ```
  - 2. 实现一个解析器 Compile
- - 3. 实现一个订阅者 Watche
+ - 3. 实现一个订阅者 Watcher
  - 4. 实现一个订阅器 Dep
+    - 依赖管理： 我们通过defineReactive方法将data中的数据进行响应式后，虽然可以监听到数据的变化了，那我们怎么处理通知视图就更新呢
+    - 1. 和试图绑定的data 2. watch 3. computed 都需要依赖收集
+    - 2. 一个属性可能有多个依赖。每个响应式数据都有一个Dep来管理依赖
+    - 3. 如何收集依赖
+    ```js
+    function defineReactive (obj, key, val) {
+        let Dep; // 依赖
+
+        Object.defineProperty(obj, key, {
+            enumerable: true,
+            configurable: true,
+            get: () => {
+                console.log('我被读了，我要不要做点什么好?');
+                // 被读取了，将这个依赖收集起来
+                Dep.depend(); // 本次新增
+                return val;
+            },
+            set: newVal => {
+                if (val === newVal) {
+                    return;
+                }
+                val = newVal;
+                // 被改变了，通知依赖去更新
+                Dep.notify(); // 本次新增
+                console.log("数据被改变了，我要把新的值渲染到页面上去!");
+            }
+        })
+    }
+    ```
+
 15. Vue 框架怎么实现对象和数组的监听？
+- 我们发现Object.defineProperty对数组进行响应式化是有缺陷的
+- 虽然我们可以监听到索引的改变，但是defineProperty不能检测到数组长度的变化，准确的说是通过改变length而增加的长度不能监测到。这种情况无法触发任何改变, 而且监听数组所有索引的的代价也比较高。
+- 因此需要改写Array的方法，具体怎么改写呢
+    1. 先获取原生 Array 的原型方法
+    2. 对 Array 的原型方法使用 Object.defineProperty 做一些拦截操作
+    3. 把需要被拦截的 Array 类型的数据原型指向改造后原型
+- Vue在array.js中重写了methodsToPatch中七个方法，并将重写后的原型暴露出去
+
+
 16. Proxy 与 Object.defineProperty 优劣对比
     - Proxy 可以直接监听对象而非属性
     - Proxy 可以直接监听数组的变化
@@ -63,4 +121,30 @@
     - Proxy 返回的是一个新对象,我们可以只操作新的对象达到目的,而 Object.defineProperty 只能遍历对象属性直接修改
     - Proxy 作为新标准将受到浏览器厂商重点持续的性能优化，也就是传说中的新标准的性能红利
     - Object.defineProperty 的优势 - 兼容性好
-17. 
+
+17. 如何实现一个响应式双向数据绑定
+```js
+function defineAvtive(obj, key, val) {
+    Object.defineProperty(obj, key, {
+        enumable: true,
+        configurable: true,
+        get: () => {
+            console.log('我被读了，我要不要做点什么好?');
+            return val;
+        },
+        set: newVal => {
+            if (val === newVal) {
+                return;
+            }
+            val = newVal;
+            console.log("数据被改变了，我要把新的值渲染到页面上去!");
+        }
+    });
+}
+let data = {
+    text: 'hello world',
+};
+defineReactive(data, 'text', data.text);
+console.log(data.text); // 控制台输出 <我被读了，我要不要做点什么好?>
+data.text = 'hello Vue'; // 控制台输出 <hello Vue && 数据被改变了，我要把新的值渲染到页面上去!>
+```

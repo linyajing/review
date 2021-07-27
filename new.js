@@ -53,22 +53,44 @@ var arr = [ [1, 2, 2], [3, 4, 5, 5], [6, 7, 8, 9, [11, 12, [12, 13, [14] ] ] ], 
 //     return [...new Set(this)];
 // }
 
-Array.prototype.zonghe = function () {
-    let map = {};
-    function aa (list) {
-        list.forEach(item => {
-            if (Array.isArray(item)) {
-                aa(item);
-            } else {
-                map[item] = item;
-            }
-        });
+// Array.prototype.zonghe = function () {
+//     let map = {};
+//     function aa (list) {
+//         list.forEach(item => {
+//             if (Array.isArray(item)) {
+//                 aa(item);
+//             } else {
+//                 map[item] = item;
+//             }
+//         });
+//     }
+//     aa(this);
+
+//     console.log(map);
+
+//     return Object.keys(map);
+// }
+
+// console.log(arr.zonghe());
+
+function merge(arr1, arr2) {
+    let result = [];
+    let j = 0;
+    let temp = arr2[0];
+    for (let i = 0; i < arr1.length; i++) {
+        if (temp === arr1[i].charAt(0)){
+            result.push(arr1[i]);
+        } else {
+            result.push(temp);
+            result.push(arr1[i]);
+            temp = arr2[j++];
+        }
+        if (i === arr1.length - 1){
+            result.push(temp);
+        }
     }
-    aa(this);
-
-    console.log(map);
-
-    return Object.keys(map);
+    return result;
 }
-
-console.log(arr.zonghe());
+const arr1 = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'D1', 'D2']
+const arr2 = ['A', 'B', 'C', 'D']
+console.log(merge(arr1, arr2));

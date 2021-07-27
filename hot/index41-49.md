@@ -1,3 +1,15 @@
+# 第 41 题：下面代码输出什么
+```js
+var a = 10;
+(function () {
+    console.log(a) // undefined
+    a = 5
+    console.log(window.a) // 10
+    var a = 20;
+    console.log(a) // 20
+})()
+```
+
 # 42 实现一个sleep函数 比如 sleep(1000) 意味着等待1000毫秒，可从 Promise、Generator、Async/Await 等角度实现
 ```js
 //Promise
@@ -38,6 +50,7 @@ function output(){
 }
 sleep(output,1000);
 ```
+
 # 46 输出以下代码执行的结果并解释为什么
 ```js
 var obj = {

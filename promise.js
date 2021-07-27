@@ -10,14 +10,13 @@ function load(url) {
 
 // 实现尽快加载完一组资源
 // k 为最多能同时加载的资源数
-function loadResources(urls, k = 3) {
-    let count = 0;
-    let result = [];
-    let originIndex = urls.length;
-    let done = 0;
+function loadResources(urls, k = 1) {
+    let count = 0; // 当前队列中执行个数
+    let result = []; // 响应结果
+    let originIndex = urls.length; // 队列原始长度
+    let done = 0; // 完成的数量
     return new Promise(resolve => { 
         function task (url, index) {
-            count++;
             load(url).then(res => {
                 count--;
                 done++;
@@ -35,6 +34,7 @@ function loadResources(urls, k = 3) {
         //循环开启三次
         for (var i = 0; i < k; i++) {
             let nextUrl = urls.shift();
+            count++;
             task(nextUrl, i);
         }
     });

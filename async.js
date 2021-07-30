@@ -6,7 +6,7 @@ const asyncTasks = [
 const callback = res => console.log(res)
     
 function run(arr, cb){
-    doneFn = (index) => value => result[index] = value
+    // doneFn = (index) => value => result[index] = value
     const runFn = function (fn) {
         return new Promise(resolve => {
             fn(value => resolve(value))

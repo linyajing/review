@@ -106,15 +106,28 @@ var b = 10;
 
 ```
 
-# 第 35 题：浏览器缓存读取规则 请求时浏览器缓存 from memory cache 和 from disk cache 的依据是什么，哪些数据什么时候存放在 Memory Cache 和 Disk Cache中？
+# 第 35 题：浏览器缓存读取规则 请求时浏览器缓存 from memory cache 和 from disk cache 的依据是什么，哪些数据什么时候存放在 Memory Cache 和 Disk Cache中？可以分成 Service Worker、Memory Cache、Disk Cache 和 Push Cache，那请求的时候 from memory cache 和 from disk cache 的依据是什么，哪些数据什么时候存放在 Memory Cache 和 Disk Cache中？
 
-# 36 数组拍平
+
+# 36 数组拍平,使用迭代的方式
+```js
+let arr = [1, 2, [3, 4, 5, [6, 7], 8], 9, 10, [11, [12, 13]]];
+const flatten = function (arr) {
+    while (arr.some(item => Array.isArray(item))) {
+        arr = [].concat(...arr);
+    }
+    return arr
+}
+
+console.log(flatten(arr))
+
+```
 
 # 第 37 题：为什么 Vuex 的 mutation 和 Redux 的 reducer 中不能做异步操作？
+- 因为异步操作是成功还是失败不可预测，什么时候进行异步操作也不可预测；当异步操作成功或失败时，如果不 commit(mutation) 或者 dispatch(action)，Vuex 和 Redux 就不能捕获到异步的结果从而进行相应的操作
 
 # 第 38 题：下面代码中 a 在什么情况下会打印 1？
 ```js
-var a = ?;
 if (a == 1 && a == 2 && a == 3) {
  	console.log(1);
 }

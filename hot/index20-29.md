@@ -18,6 +18,8 @@
 - 用新房和二手房来做比喻 
 
 # 第 24 题：聊聊 Redux 和 Vuex 的设计思想
+- 共同点：都是为响应式编程提供的一个的可预测的状态容器。实现思路都是 全局状态state => dispatch(action) => educer(vuex里的mutation) =>  生成newState; 整个状态为同步操作
+- 不同点：最大的区别在于处理异步的不同，vuex里面多了一步commit操作，在action之后commit(mutation)之前处理异步，而redux里面则是通过中间件处理
 
 # 第 25 题：说说浏览器和 Node 事件循环的区别
 - 浏览器 执行一只task（宏任务）执行完micro-task队列 （微任务）如此循环往复下去
@@ -81,6 +83,9 @@ console.log(counter); // 4
 - 2、CSRF攻击的原因是浏览器会自动带上cookie，而浏览器不会自动带上token
 
 # 第 29 题：聊聊 Vue 的双向数据绑定，Model 如何改变 View，View 又是如何改变 Model 的
+- getter实现数据依赖收集,对数据进行watcher
+- 使用setter对数据的observer进行数据变更的监听，消息通知,派发更新 （队列机制）
+- view改变 Model是Vue实现的一个功能点，本质是
 
 # 第 30 题：两个数组合并成一个数组 请把俩个数组 [A1, A2, B1, B2, C1, C2, D1, D2] 和 [A, B, C, D]，合并为 [A1, A2, A, B1, B2, B, C1, C2, C, D1, D2, D]
 ```js

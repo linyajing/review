@@ -10,7 +10,7 @@ function deepClone (target) {
     if (typeof target === 'object') {
         if (Array.isArray(result)) {
             result = [];
-            for(let i in target) {
+            for (let i in target) {
                 result.push(deepClone(target[i]));
             }
         } else if (target = null) {

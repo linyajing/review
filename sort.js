@@ -151,7 +151,7 @@ function mergeSort(arr) {
 }
 
 /** 
- * 5.快速排序
+ * 5.快速排序 https://juejin.cn/post/6844904122274185224
  * （1）首先，选取数组的中间项作为参考点pivot。
  *（2）创建左右两个指针left和right，left指向数组的第一项，right指向最后一项，然后移动左指针，直到其值不小于pivot，然后移动右指针，直到其值不大于pivot。
  *（3）如果left仍然不大于right，交换左右指针的值（指针不交换），然后左指针右移，右指针左移，继续循环直到left大于right才结束，返回left指针的值。

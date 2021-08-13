@@ -171,3 +171,17 @@ function add () {
 }
 console.log(add());
 console.log(add(1)(2)());
+
+
+
+function sum () {
+    let result = [...arguments].reduce((pre, val) => pre + val);
+    function aa() {
+        result += [...arguments].reduce((pre, val) => pre + val);
+        return aa;
+    }
+    aa.sumOf = function () {
+        return result
+    }
+    return aa;
+}

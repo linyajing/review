@@ -26,7 +26,7 @@ let woman = new Woman();
 // - 不能继承原型属性/方法，只能继承父类的实例属性和方法
 function Woman(name){
     //继承了People
-     People.call(this); //People.call(this，'wangxiaoxia'); 
+     People.call(this, ...arguments); //People.call(this，'wangxiaoxia'); 
      this.name = name || 'renbo'
    }
    let womanObj = new Woman();
@@ -39,7 +39,7 @@ function People(name,age){
 }
 //父类方法
 People.prototype.eat = function(){
-return this.name + this.age + 'eat sleep'
+    return this.name + this.age + 'eat sleep'
 }
 //子类
 function Woman(name,age){

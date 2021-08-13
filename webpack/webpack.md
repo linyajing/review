@@ -31,5 +31,5 @@
             - 2. 为webpack事件流挂上hooks
     - 读取入口配置，遍历入口文件
     - 执行 run 或者 watch 方法，开始编译
-- 
+- chokidar 
     
